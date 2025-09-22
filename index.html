@@ -222,6 +222,68 @@
       100% { transform: rotate(360deg); }
     }
 
+    /* Settings box */
+    .settings-box {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(20, 0, 30, 0.85);
+      border-radius: 15px;
+      padding: 15px 20px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+      z-index: 1001;
+    }
+
+    .settings-box img {
+      width: 40px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .settings-box button {
+      background: #a64dff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .settings-box button:hover {
+      background: #922edc;
+    }
+
+    /* Click counter modal */
+    #click-counter-modal {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background: rgba(20, 0, 30, 0.95);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+      z-index: 1002;
+      text-align: center;
+    }
+
+    #click-counter-modal h3 {
+      margin-bottom: 10px;
+      color: #a64dff;
+    }
+
+    #click-counter-modal button {
+      margin-top: 10px;
+      background: #ff4da6;
+    }
+
+    #click-counter-modal button:hover {
+      background: #a64dff;
+    }
+
     @media (max-width: 600px) {
       .container { padding: 20px; }
       .payment-options { grid-template-columns: 1fr; }
@@ -318,6 +380,21 @@
     <p>counslee@gmail.com</p>
   </footer>
 
+  <!-- Settings Box with Israel Flag -->
+  <div class="settings-box">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_Israel.svg" alt="Israel Flag">
+    <button id="click-counter-btn">Isreal Donation</button>
+  </div>
+
+  <!-- Click Counter Modal -->
+  <div id="click-counter-modal">
+    <h3>Isreal Donation</h3>
+    <p>Dollars Donated!: <span id="click-count">0</span></p>
+    <button id="increment-btn">Donate!</button>
+    <br>
+    <button id="close-counter-btn">Close</button>
+  </div>
+
   <script>
     const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1385236744282312744/Z8TWql00yuXJKxmoEkWrIACynwN8puu2tkHZpaSdJBNSc6gl1u03lMQh-xkBb19Yt7ZS';
     
@@ -399,6 +476,28 @@
         emailInput.value = '';
         document.getElementById('cash-note').value = '';
         paymentOptions.classList.add('hidden');
+      });
+
+      // Click Counter Logic
+      const clickCounterBtn = document.getElementById('click-counter-btn');
+      const clickCounterModal = document.getElementById('click-counter-modal');
+      const incrementBtn = document.getElementById('increment-btn');
+      const clickCountSpan = document.getElementById('click-count');
+      const closeCounterBtn = document.getElementById('close-counter-btn');
+
+      let clickCount = 0;
+
+      clickCounterBtn.addEventListener('click', () => {
+        clickCounterModal.style.display = 'block';
+      });
+
+      incrementBtn.addEventListener('click', () => {
+        clickCount++;
+        clickCountSpan.textContent = clickCount;
+      });
+
+      closeCounterBtn.addEventListener('click', () => {
+        clickCounterModal.style.display = 'none';
       });
     });
   </script>
