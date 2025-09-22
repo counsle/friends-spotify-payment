@@ -23,6 +23,34 @@
       padding: 20px;
     }
 
+    /* 🔔 Notice box */
+    .notice {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #ff4da6, #a64dff);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+      font-weight: bold;
+      max-width: 320px;
+      z-index: 1000;
+      animation: pulse 2s infinite;
+    }
+
+    .notice p {
+      font-size: 0.95rem;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 10px #ff4da6; }
+      50% { transform: scale(1.05); box-shadow: 0 0 20px #a64dff; }
+      100% { transform: scale(1); box-shadow: 0 0 10px #ff4da6; }
+    }
+
     .container {
       max-width: 800px;
       width: 100%;
@@ -201,6 +229,13 @@
   </style>
 </head>
 <body>
+
+  <!-- 🔔 Floating notice -->
+  <div class="notice">
+    <p>For reoccurring subscribers, please pay on the <strong>third</strong> of every month.<br>
+    If you are just now joining, do not worry about this until your next payment.</p>
+  </div>
+
   <div class="container">
     <header>
       <h1>Spotify Plan</h1>
