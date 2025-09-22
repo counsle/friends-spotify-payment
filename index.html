@@ -117,17 +117,10 @@
       margin-bottom: 15px;
     }
 
-    .paypal i {
-      color: #0070ba;
-    }
-
-    .cashapp i {
-      color: #00D632;
-    }
-
-    .venmo i {
-      color: #3D95CE;
-    }
+    .paypal i { color: #0070ba; }
+    .cashapp i { color: #00D632; }
+    .venmo i { color: #3D95CE; }
+    .cashinperson i { color: #FFD700; }
 
     .payment-option h3 {
       margin-bottom: 10px;
@@ -154,14 +147,8 @@
       font-size: 1.1rem;
     }
 
-    .btn:hover {
-      background: #922edc;
-    }
-
-    .btn:disabled {
-      background: #444;
-      cursor: not-allowed;
-    }
+    .btn:hover { background: #922edc; }
+    .btn:disabled { background: #444; cursor: not-allowed; }
 
     .instructions {
       margin-top: 40px;
@@ -180,13 +167,8 @@
       line-height: 1.6;
     }
 
-    .instructions li {
-      margin-bottom: 10px;
-    }
-
-    .hidden {
-      display: none;
-    }
+    .instructions li { margin-bottom: 10px; }
+    .hidden { display: none; }
 
     footer {
       margin-top: 40px;
@@ -213,13 +195,8 @@
     }
 
     @media (max-width: 600px) {
-      .container {
-        padding: 20px;
-      }
-
-      .payment-options {
-        grid-template-columns: 1fr;
-      }
+      .container { padding: 20px; }
+      .payment-options { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -233,15 +210,9 @@
     <div class="status-card">
       <h2>Availability Notice</h2>
       <p>Please ask the Owner of this website if there are any remaining slots before purchasing.</p>
-      
       <p>Cost is $5.25, If sent less than $5.25 you WILL NOT recieve your Spotify Premium Login nor a refund.</p>
-      
       <p>$5.00 if paying with cash in person.</p>
-
-      <p>Owner's contact info --> 
-      Discord "counsle"
-      email counslee@gmail.com
-      If you know me peronsally then you know where to contact me other than that.</p>
+      <p>Owner's contact info --> Discord "counsle", email counslee@gmail.com</p>
     </div>
     
     <div class="email-form">
@@ -281,6 +252,19 @@
           <p>Send payment to @counsle</p>
           <a href="https://account.venmo.com/u/counsle" class="btn" target="_blank">Pay with Venmo</a>
         </div>
+
+        <!-- New Cash/In Person Option -->
+        <div class="payment-option cashinperson">
+          <i class="fas fa-hand-holding-usd"></i>
+          <h3>Cash / In Person</h3>
+          <p>Pay $5.00 in person (contact the owner directly).</p>
+          <div class="form-group">
+            <label for="cash-note">Additional Note</label>
+            <textarea id="cash-note" placeholder="Enter any note (e.g. meeting place, time)" rows="3"
+              style="width: 100%; padding: 10px; border-radius: 10px; border: none; font-size: 1rem;"></textarea>
+          </div>
+          <button class="btn cash-btn">Submit Cash/In Person Request</button>
+        </div>
       </div>
     </div>
     
@@ -314,9 +298,9 @@
         proceedBtn.disabled = !emailInput.value.trim();
       });
       
-      async function sendToDiscord(email, paymentMethod) {
+      async function sendToDiscord(email, paymentMethod, note = '') {
         const message = {
-          content: `New Spotify Family signup:\nEmail: ${email}\nPayment Method: ${paymentMethod}`
+          content: `New Spotify Family signup:\nEmail: ${email}\nPayment Method: ${paymentMethod}${note ? `\nNote: ${note}` : ''}`
         };
         
         try {
@@ -351,7 +335,7 @@
         }, 1500);
       });
       
-      document.querySelectorAll('.payment-option .btn').forEach(btn => {
+      document.querySelectorAll('.payment-option a.btn').forEach(btn => {
         btn.addEventListener('click', async function(e) {
           e.preventDefault();
           const email = emailInput.value.trim();
@@ -362,6 +346,23 @@
           emailInput.value = '';
           paymentOptions.classList.add('hidden');
         });
+      });
+
+      document.querySelector('.cash-btn').addEventListener('click', async function() {
+        const email = emailInput.value.trim();
+        const note = document.getElementById('cash-note').value.trim();
+        
+        if (!email || !email.includes('@') || !email.includes('.')) {
+          alert('Please enter a valid email address before submitting.');
+          return;
+        }
+        
+        await sendToDiscord(email, 'Cash / In Person', note);
+        
+        alert('Your request has been submitted! Please coordinate directly with the owner to complete the payment.');
+        emailInput.value = '';
+        document.getElementById('cash-note').value = '';
+        paymentOptions.classList.add('hidden');
       });
     });
   </script>
