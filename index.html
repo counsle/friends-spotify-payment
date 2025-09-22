@@ -1,6 +1,3 @@
-Got it 👍 — here’s your **full updated file** with the **black + purple color scheme** applied everywhere.
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,18 +58,10 @@ Got it 👍 — here’s your **full updated file** with the **black + purple co
       margin-bottom: 30px;
     }
 
-    .slots {
-      font-size: 2rem;
+    .status-card p {
+      font-size: 1.2rem;
       font-weight: bold;
-      margin: 10px 0;
-    }
-
-    .slots.available {
       color: #a64dff;
-    }
-
-    .slots.full {
-      color: #ff4d88;
     }
 
     .email-form {
@@ -242,9 +231,8 @@ Got it 👍 — here’s your **full updated file** with the **black + purple co
     </header>
     
     <div class="status-card">
-      <h2>Current Availability</h2>
-      <div class="slots available" id="slots">Loading slots...</div>
-      <p id="slot-status">Checking availability...</p>
+      <h2>Availability Notice</h2>
+      <p>Please ask the Owner of this website if there are any remaining slots before purchasing.</p>
     </div>
     
     <div class="email-form">
@@ -291,7 +279,7 @@ Got it 👍 — here’s your **full updated file** with the **black + purple co
       <h2>What Happens Next?</h2>
       <ol>
         <li>Complete your payment using one of the methods above</li>
-        <li>I'll personally confirm your payment and update the slot count</li>
+        <li>I'll personally confirm your payment</li>
         <li>You'll receive an email within 24 hours with login instructions</li>
         <li>Follow the instructions to join our Spotify Family plan</li>
         <li>Start enjoying ad-free music, offline downloads, and more!</li>
@@ -306,44 +294,19 @@ Got it 👍 — here’s your **full updated file** with the **black + purple co
   <script>
     const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1385236744282312744/Z8TWql00yuXJKxmoEkWrIACynwN8puu2tkHZpaSdJBNSc6gl1u03lMQh-xkBb19Yt7ZS';
     
-    let filledSlots = 3;
-    const totalSlots = 6;
-    
     document.addEventListener('DOMContentLoaded', function() {
       const emailInput = document.getElementById('email');
       const proceedBtn = document.getElementById('proceed-btn');
       const paymentOptions = document.getElementById('payment-options');
-      const slotsElement = document.getElementById('slots');
-      const slotStatus = document.getElementById('slot-status');
       const loadingElement = document.getElementById('loading');
       
-      function updateSlots() {
-        slotsElement.textContent = `${filledSlots}/${totalSlots} Slots Filled`;
-        
-        if (filledSlots >= totalSlots) {
-          slotsElement.classList.remove('available');
-          slotsElement.classList.add('full');
-          slotStatus.textContent = 'All spots are currently filled';
-          proceedBtn.disabled = true;
-          proceedBtn.textContent = 'No Slots Available';
-        } else {
-          slotsElement.classList.remove('full');
-          slotsElement.classList.add('available');
-          slotStatus.textContent = `Only ${totalSlots - filledSlots} spots remaining at $3.99/month per person`;
-          proceedBtn.disabled = false;
-          proceedBtn.textContent = 'Proceed to Payment';
-        }
-      }
-      
-      updateSlots();
-      
       emailInput.addEventListener('input', function() {
-        proceedBtn.disabled = !emailInput.value.trim() || filledSlots >= totalSlots;
+        proceedBtn.disabled = !emailInput.value.trim();
       });
       
       async function sendToDiscord(email, paymentMethod) {
         const message = {
-          content: `New Spotify Family signup:\nEmail: ${email}\nPayment Method: ${paymentMethod}\nSlots: ${filledSlots}/${totalSlots}`
+          content: `New Spotify Family signup:\nEmail: ${email}\nPayment Method: ${paymentMethod}`
         };
         
         try {
@@ -394,8 +357,3 @@ Got it 👍 — here’s your **full updated file** with the **black + purple co
   </script>
 </body>
 </html>
-```
-
-Now the **entire site is dark with purple accents** — slots, buttons, highlights, and hover effects all match the theme.
-
-Do you want me to also make the **CashApp/PayPal/Venmo cards purple-styled** instead of their original brand colors, or keep their logos/colors as-is for recognizability?
