@@ -109,7 +109,7 @@
       font-weight: 500;
     }
 
-    .form-group input {
+    .form-group input, .form-group textarea {
       width: 100%;
       padding: 15px;
       border: none;
@@ -245,14 +245,14 @@
     <div class="status-card">
       <h2>Availability Notice</h2>
       <p>Please ask the Owner of this website if there are any remaining slots before purchasing.</p>
-      <p>Cost is $5.25, If sent less than $5.25 you WILL NOT recieve your Spotify Premium Login nor a refund.</p>
+      <p>Cost is $5.25, If sent less than $5.25 you WILL NOT receive your Spotify Premium Login nor a refund.</p>
       <p>$5.00 if paying with cash in person.</p>
       <p>Owner's contact info --> Discord "counsle", email counslee@gmail.com</p>
     </div>
     
     <div class="email-form">
       <h2>Join the Family Plan</h2>
-      <p>Enter your email address to proceed with payment and recieve login details.</p>
+      <p>Enter your email address to proceed with payment and receive login details.</p>
       
       <div class="form-group">
         <label for="email">Email Address</label>
@@ -288,15 +288,13 @@
           <a href="https://account.venmo.com/u/counsle" class="btn" target="_blank">Pay with Venmo</a>
         </div>
 
-        <!-- New Cash/In Person Option -->
         <div class="payment-option cashinperson">
           <i class="fas fa-hand-holding-usd"></i>
           <h3>Cash / In Person</h3>
           <p>Pay $5.00 in person (contact the owner directly).</p>
           <div class="form-group">
             <label for="cash-note">Additional Note</label>
-            <textarea id="cash-note" placeholder="Enter any note (e.g. meeting place, time)" rows="3"
-              style="width: 100%; padding: 10px; border-radius: 10px; border: none; font-size: 1rem;"></textarea>
+            <textarea id="cash-note" placeholder="Enter any note (e.g. meeting place, time)" rows="3"></textarea>
           </div>
           <button class="btn cash-btn">Submit Cash/In Person Request</button>
         </div>
@@ -339,15 +337,11 @@
         };
         
         try {
-          const response = await fetch(DISCORD_WEBHOOK, {
+          await fetch(DISCORD_WEBHOOK, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(message),
           });
-          
-          if (!response.ok) {
-            console.error('Failed to send to Discord');
-          }
         } catch (error) {
           console.error('Error sending to Discord:', error);
         }
@@ -369,21 +363,28 @@
           sendToDiscord(email, 'Not selected yet');
         }, 1500);
       });
-      
+
+      // 🔑 Fixed payment redirects
       document.querySelectorAll('.payment-option a.btn').forEach(btn => {
-        btn.addEventListener('click', async function(e) {
-          e.preventDefault();
+        btn.addEventListener('click', function() {
           const email = emailInput.value.trim();
           const paymentMethod = this.parentElement.querySelector('h3').textContent;
-          await sendToDiscord(email, paymentMethod);
+
+          // Open payment link immediately
           window.open(this.href, '_blank');
+
+          // Send Discord message asynchronously
+          sendToDiscord(email, paymentMethod);
+
           alert('Thank you for your payment! Please allow up to 24 hours for confirmation and instructions.');
+
+          // Reset form
           emailInput.value = '';
           paymentOptions.classList.add('hidden');
         });
       });
 
-      document.querySelector('.cash-btn').addEventListener('click', async function() {
+      document.querySelector('.cash-btn').addEventListener('click', function() {
         const email = emailInput.value.trim();
         const note = document.getElementById('cash-note').value.trim();
         
@@ -392,7 +393,7 @@
           return;
         }
         
-        await sendToDiscord(email, 'Cash / In Person', note);
+        sendToDiscord(email, 'Cash / In Person', note);
         
         alert('Your request has been submitted! Please coordinate directly with the owner to complete the payment.');
         emailInput.value = '';
